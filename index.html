@@ -1,11 +1,571 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>styleInstructCaps</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="StyleInstructCaps — instruction-following speaking-style captioning benchmark for audio language models.">
+  <title>StyleInstructCaps</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>styleInstructCaps</h1>
-  <p>Anonymous research project page</p>
+  <nav class="site-nav" aria-label="Main">
+    <div class="container inner">
+      <a class="brand" href="#">StyleInstructCaps</a>
+      <ul class="links">
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#figure">Figure</a></li>
+        <li><a href="#benchmark">Benchmark</a></li>
+        <li><a href="#results">Results</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="container">
+      <h1>StyleInstructCaps</h1>
+      <p class="tagline">Instruction-Following Speaking-Style Captioning for Audio Language Models</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="https://github.com/styleinstructcaps/StyleInstructCaps" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="btn btn-secondary" href="https://huggingface.co/datasets/StyleInstructCaps/StyleInstructCapsDB" target="_blank" rel="noopener noreferrer">Hugging Face Dataset</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="overview">
+      <div class="container">
+        <h2>Overview</h2>
+        <p class="lead">
+          <strong>StyleInstructCaps</strong> is a large-scale benchmark for <em>instruction-following speaking-style captioning</em>
+          with audio language models. We release <strong>StyleInstructCapsDB</strong> on Hugging Face — over one million
+          utterances with rich style captions, six evaluation subsets, and an official toolkit spanning eight evaluation axes:
+          metadata groundedness, hallucination, instruction following, speaker verification, speaker consistency,
+          unseen-dataset generalization, out-of-domain prompts, and multi-model clustering analysis.
+        </p>
+        <p class="lead" style="margin-top: 1rem;">
+          Audio is not redistributed; each row provides a <code>relative_audio_path</code> resolved against upstream corpora
+          (Emilia, VoxCeleb, VCTK, EARS, Expresso, GigaSpeech). Evaluation uses Qwen3-32B as LLM-as-judge and e5-base-v2 for speaker metrics.
+        </p>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="value">1.05M+</div>
+            <div class="label">Training utterances</div>
+          </div>
+          <div class="stat-card">
+            <div class="value">6</div>
+            <div class="label">Evaluation subsets</div>
+          </div>
+          <div class="stat-card">
+            <div class="value">8</div>
+            <div class="label">Evaluation axes</div>
+          </div>
+          <div class="stat-card">
+            <div class="value">CC BY-NC 4.0</div>
+            <div class="label">License</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="figure">
+      <div class="container">
+        <h2>Benchmark Overview</h2>
+        <div class="figure-wrap">
+          <img src="assets/StyleinstructCaps_fig_v2.png" alt="StyleInstructCaps benchmark overview figure">
+          <a class="pdf-link" href="StyleinstructCaps_fig_v2.pdf">Open the figure as PDF</a>
+          <p class="figure-caption">
+            Overview of the StyleInstructCaps benchmark: dataset construction, instruction-following style captioning,
+            and multi-axis evaluation on StyleInstructCaps-MetaSet and speaker-consistency splits.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="benchmark">
+      <div class="container">
+        <h2>Evaluation Toolkit</h2>
+        <p class="lead">
+          The <a href="https://github.com/styleinstructcaps/StyleInstructCaps">official evaluation repository</a>
+          provides standalone scripts for all eight axes. Load subsets from
+          <a href="https://huggingface.co/datasets/StyleInstructCaps/StyleInstructCapsDB">StyleInstructCaps/StyleInstructCapsDB</a>:
+        </p>
+        <div class="axes-table-wrap">
+          <table class="axes-table">
+            <thead>
+              <tr>
+                <th>Axis</th>
+                <th>Metric</th>
+                <th>Dataset config</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>1</td><td>Metadata groundedness</td><td><code>StyleInstructCaps-MetaSet</code></td></tr>
+              <tr><td>2</td><td>Hallucination</td><td><code>StyleInstructCaps-MetaSet</code></td></tr>
+              <tr><td>3</td><td>Instruction following</td><td><code>StyleInstructCaps-MetaSet</code></td></tr>
+              <tr><td>4</td><td>Speaker caption verification</td><td><code>VCTK_speaker_prompts</code></td></tr>
+              <tr><td>5</td><td>Speaker consistency</td><td><code>VCTK_speaker_prompts</code></td></tr>
+              <tr><td>6</td><td>Unseen eval (groundedness + hallucination + IF)</td><td><code>Gigaspeech_SpeechCraft_captions</code></td></tr>
+              <tr><td>7</td><td>OOD prompt analysis (IF only)</td><td><code>VCTK_unseen_prompts</code></td></tr>
+              <tr><td>8</td><td>Speaker description consistency (clustering plots)</td><td><code>VCTK_speaker_prompts</code> (multi-model)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="results">
+      <div class="container">
+        <h2>Main Results</h2>
+
+        <div class="table-section" id="table1">
+          <h3>Table 1</h3>
+          <p class="table-caption">
+            Metadata groundedness, hallucination severity, and instruction-following performance evaluated on
+            <em>StyleInstructCaps-MetaSet</em>. Blue shading indicates relative performance for scalar metrics.
+          </p>
+          <div class="table-scroll">
+            <table class="results-table table-blue">
+              <thead>
+                <tr>
+                  <th rowspan="2">Model</th>
+                  <th colspan="2">LLM metadata groundedness</th>
+                  <th colspan="3">LLM hallucination severity (%)</th>
+                  <th colspan="2">Instruction following</th>
+                </tr>
+                <tr>
+                  <th>Meta score ↑</th>
+                  <th>Hall. ↓</th>
+                  <th>Low</th>
+                  <th>Mid</th>
+                  <th>High</th>
+                  <th>IFA score ↑</th>
+                  <th>IFA rate (%) ↑</th>
+                </tr>
+              </thead>
+              <tbody>
+          <tr class="oracle">
+            <th scope="row">Oracle Caption (PSC)</th>
+            <td class="num" style="background:rgba(0,102,204,0.600)">9.93</td>
+            <td class="num" style="background:rgba(0,102,204,0.597)">0.07</td>
+            <td class="num" style="background:rgba(0,102,204,0.598)">99.5</td>
+            <td class="num" style="background:rgba(0,102,204,0.597)">0.5</td>
+            <td class="num" style="background:rgba(0,102,204,0.600)">0.0</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
+          </tr>
+          <tr class="oracle">
+            <th scope="row">Oracle caption (SIC-DB)</th>
+            <td class="num" style="background:rgba(0,102,204,0.600)">9.93</td>
+            <td class="num" style="background:rgba(0,102,204,0.600)">0.04</td>
+            <td class="num" style="background:rgba(0,102,204,0.600)">99.8</td>
+            <td class="num" style="background:rgba(0,102,204,0.600)">0.2</td>
+            <td class="num" style="background:rgba(0,102,204,0.600)">0.0</td>
+            <td class="num" style="background:rgba(0,102,204,0.540)">8.48</td>
+            <td class="num" style="background:rgba(0,102,204,0.500)">71.3</td>
+          </tr>
+          <tr>
+            <th scope="row">Audio-Flamingo-3</th>
+            <td class="num" style="background:rgba(0,102,204,0.120)">5.69</td>
+            <td class="num" style="background:rgba(0,102,204,0.120)">6.07</td>
+            <td class="num" style="background:rgba(0,102,204,0.120)">15.4</td>
+            <td class="num" style="background:rgba(0,102,204,0.387)">20.7</td>
+            <td class="num" style="background:rgba(0,102,204,0.120)">63.8</td>
+            <td class="num" style="background:rgba(0,102,204,0.492)">8.21</td>
+            <td class="num" style="background:rgba(0,102,204,0.422)">62.4</td>
+          </tr>
+          <tr>
+            <th scope="row">Voxtral-Mini-3B</th>
+            <td class="num" style="background:rgba(0,102,204,0.332)">7.56</td>
+            <td class="num" style="background:rgba(0,102,204,0.355)">3.12</td>
+            <td class="num" style="background:rgba(0,102,204,0.309)">48.6</td>
+            <td class="num" style="background:rgba(0,102,204,0.238)">35.0</td>
+            <td class="num" style="background:rgba(0,102,204,0.477)">16.4</td>
+            <td class="num" style="background:rgba(0,102,204,0.481)">8.15</td>
+            <td class="num" style="background:rgba(0,102,204,0.471)">68.0</td>
+          </tr>
+          <tr>
+            <th scope="row">Voxtral-Small-24B</th>
+            <td class="num" style="background:rgba(0,102,204,0.291)">7.20</td>
+            <td class="num" style="background:rgba(0,102,204,0.477)">1.58</td>
+            <td class="num" style="background:rgba(0,102,204,0.450)">73.5</td>
+            <td class="num" style="background:rgba(0,102,204,0.427)">16.8</td>
+            <td class="num" style="background:rgba(0,102,204,0.527)">9.7</td>
+            <td class="num" style="background:rgba(0,102,204,0.368)">7.51</td>
+            <td class="num" style="background:rgba(0,102,204,0.469)">67.8</td>
+          </tr>
+          <tr>
+            <th scope="row">Qwen2-Audio-7B-Instruct</th>
+            <td class="num" style="background:rgba(0,102,204,0.125)">5.73</td>
+            <td class="num" style="background:rgba(0,102,204,0.159)">5.58</td>
+            <td class="num" style="background:rgba(0,102,204,0.141)">19.1</td>
+            <td class="num" style="background:rgba(0,102,204,0.312)">27.9</td>
+            <td class="num" style="background:rgba(0,102,204,0.201)">53.0</td>
+            <td class="num" style="background:rgba(0,102,204,0.203)">6.58</td>
+            <td class="num" style="background:rgba(0,102,204,0.346)">53.6</td>
+          </tr>
+          <tr>
+            <th scope="row">MERaLiON-AudioLLM</th>
+            <td class="num" style="background:rgba(0,102,204,0.220)">6.57</td>
+            <td class="num" style="background:rgba(0,102,204,0.503)">1.25</td>
+            <td class="num" style="background:rgba(0,102,204,0.498)">81.8</td>
+            <td class="num" style="background:rgba(0,102,204,0.492)">10.6</td>
+            <td class="num" style="background:rgba(0,102,204,0.543)">7.6</td>
+            <td class="num" style="background:rgba(0,102,204,0.120)">6.11</td>
+            <td class="num" style="background:rgba(0,102,204,0.120)">27.7</td>
+          </tr>
+          <tr>
+            <th scope="row">MOSS-Audio</th>
+            <td class="num" style="background:rgba(0,102,204,0.506)">9.10</td>
+            <td class="num" style="background:rgba(0,102,204,0.242)">4.54</td>
+            <td class="num" style="background:rgba(0,102,204,0.156)">21.8</td>
+            <td class="num" style="background:rgba(0,102,204,0.129)">45.4</td>
+            <td class="num" style="background:rgba(0,102,204,0.354)">32.7</td>
+            <td class="num" style="background:rgba(0,102,204,0.600)">8.82</td>
+            <td class="num" style="background:rgba(0,102,204,0.600)">82.8</td>
+          </tr>
+          <tr>
+            <th scope="row">Qwen3-Omni</th>
+            <td class="num" style="background:rgba(0,102,204,0.242)">6.77</td>
+            <td class="num" style="background:rgba(0,102,204,0.376)">2.85</td>
+            <td class="num" style="background:rgba(0,102,204,0.324)">51.2</td>
+            <td class="num" style="background:rgba(0,102,204,0.283)">30.6</td>
+            <td class="num" style="background:rgba(0,102,204,0.463)">18.2</td>
+            <td class="num" style="background:rgba(0,102,204,0.453)">7.99</td>
+            <td class="num" style="background:rgba(0,102,204,0.523)">74.0</td>
+          </tr>
+          <tr>
+            <th scope="row">Audio-Flamingo-next</th>
+            <td class="num" style="background:rgba(0,102,204,0.515)">9.18</td>
+            <td class="num" style="background:rgba(0,102,204,0.219)">4.82</td>
+            <td class="num" style="background:rgba(0,102,204,0.142)">19.4</td>
+            <td class="num" style="background:rgba(0,102,204,0.197)">38.9</td>
+            <td class="num" style="background:rgba(0,102,204,0.286)">41.7</td>
+            <td class="num" style="background:rgba(0,102,204,0.382)">7.59</td>
+            <td class="num" style="background:rgba(0,102,204,0.301)">48.5</td>
+          </tr>
+          <tr>
+            <th scope="row">SALMONN</th>
+            <td class="num" style="background:rgba(0,102,204,0.365)">7.85</td>
+            <td class="num" style="background:rgba(0,102,204,0.314)">3.63</td>
+            <td class="num" style="background:rgba(0,102,204,0.272)">42.1</td>
+            <td class="num" style="background:rgba(0,102,204,0.307)">28.3</td>
+            <td class="num" style="background:rgba(0,102,204,0.378)">29.5</td>
+            <td class="num" style="background:rgba(0,102,204,0.366)">7.50</td>
+            <td class="num" style="background:rgba(0,102,204,0.388)">58.5</td>
+          </tr>
+          <tr class="ours">
+            <th scope="row">SALMONN (PSC)</th>
+            <td class="num" style="background:rgba(0,102,204,0.522)">9.24</td>
+            <td class="num" style="background:rgba(0,102,204,0.223)">4.77</td>
+            <td class="num" style="background:rgba(0,102,204,0.153)">21.2</td>
+            <td class="num" style="background:rgba(0,102,204,0.120)">46.3</td>
+            <td class="num" style="background:rgba(0,102,204,0.355)">32.5</td>
+            <td class="num" style="background:rgba(0,102,204,0.451)">7.98</td>
+            <td class="num" style="background:rgba(0,102,204,0.340)">52.9</td>
+          </tr>
+          <tr class="ours">
+            <th scope="row">SALMONN (SIC-DB) - ST</th>
+            <td class="num" style="background:rgba(0,102,204,0.531)">9.32</td>
+            <td class="num" style="background:rgba(0,102,204,0.294)">3.88</td>
+            <td class="num" style="background:rgba(0,102,204,0.233)">35.2</td>
+            <td class="num" style="background:rgba(0,102,204,0.214)">37.3</td>
+            <td class="num" style="background:rgba(0,102,204,0.394)">27.4</td>
+            <td class="num" style="background:rgba(0,102,204,0.520)">8.37</td>
+            <td class="num" style="background:rgba(0,102,204,0.450)">65.6</td>
+          </tr>
+          <tr class="ours">
+            <th scope="row">SALMONN (SIC-DB) - MT</th>
+            <td class="num" style="background:rgba(0,102,204,0.531)">9.32</td>
+            <td class="num" style="background:rgba(0,102,204,0.330)">3.43</td>
+            <td class="num" style="background:rgba(0,102,204,0.267)">41.3</td>
+            <td class="num" style="background:rgba(0,102,204,0.204)">38.2</td>
+            <td class="num" style="background:rgba(0,102,204,0.446)">20.5</td>
+            <td class="num" style="background:rgba(0,102,204,0.565)">8.62</td>
+            <td class="num" style="background:rgba(0,102,204,0.532)">75.0</td>
+          </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="table-section" id="table2">
+          <h3>Table 2</h3>
+          <p class="table-caption">
+            Speaker-style consistency evaluation using clustering and verification metrics on the ID-balanced and UD-VCTK sets.
+            Darker shading indicates better performance per column. Higher is better for ARI, NMI, Purity, InterSep, and AUC;
+            lower is better for EER.
+          </p>
+          <div class="table-scroll">
+            <table class="results-table table-red">
+              <thead>
+                <tr>
+                  <th rowspan="2">Model</th>
+                  <th colspan="6">ID-balanced</th>
+                  <th colspan="6">UD-VCTK</th>
+                </tr>
+                <tr>
+                  <th>ARI ↑</th>
+                  <th>NMI ↑</th>
+                  <th>Purity ↑</th>
+                  <th>InterSep ↑</th>
+                  <th>EER ↓</th>
+                  <th>AUC ↑</th>
+                  <th>ARI ↑</th>
+                  <th>NMI ↑</th>
+                  <th>Purity ↑</th>
+                  <th>InterSep ↑</th>
+                  <th>EER ↓</th>
+                  <th>AUC ↑</th>
+                </tr>
+              </thead>
+              <tbody>
+          <tr>
+            <th scope="row">Audio-Flamingo-3</th>
+            <td class="num" style="background:rgba(220,53,69,0.134)">0.009</td>
+            <td class="num" style="background:rgba(220,53,69,0.149)">0.046</td>
+            <td class="num" style="background:rgba(220,53,69,0.150)">0.100</td>
+            <td class="num" style="background:rgba(220,53,69,0.156)">0.046</td>
+            <td class="num" style="background:rgba(220,53,69,0.157)">0.476</td>
+            <td class="num" style="background:rgba(220,53,69,0.162)">0.532</td>
+            <td class="num" style="background:rgba(220,53,69,0.159)">0.011</td>
+            <td class="num" style="background:rgba(220,53,69,0.179)">0.048</td>
+            <td class="num" style="background:rgba(220,53,69,0.200)">0.121</td>
+            <td class="num" style="background:rgba(220,53,69,0.198)">0.057</td>
+            <td class="num" style="background:rgba(220,53,69,0.194)">0.463</td>
+            <td class="num" style="background:rgba(220,53,69,0.214)">0.556</td>
+          </tr>
+          <tr>
+            <th scope="row">Voxtral-Mini-3B</th>
+            <td class="num" style="background:rgba(220,53,69,0.166)">0.033</td>
+            <td class="num" style="background:rgba(220,53,69,0.211)">0.122</td>
+            <td class="num" style="background:rgba(220,53,69,0.206)">0.152</td>
+            <td class="num" style="background:rgba(220,53,69,0.315)">0.133</td>
+            <td class="num" style="background:rgba(220,53,69,0.286)">0.399</td>
+            <td class="num" style="background:rgba(220,53,69,0.303)">0.643</td>
+            <td class="num" style="background:rgba(220,53,69,0.135)">0.003</td>
+            <td class="num" style="background:rgba(220,53,69,0.150)">0.028</td>
+            <td class="num" style="background:rgba(220,53,69,0.162)">0.103</td>
+            <td class="num" style="background:rgba(220,53,69,0.213)">0.063</td>
+            <td class="num" style="background:rgba(220,53,69,0.142)">0.486</td>
+            <td class="num" style="background:rgba(220,53,69,0.154)">0.519</td>
+          </tr>
+          <tr>
+            <th scope="row">Voxtral-Small-24B</th>
+            <td class="num" style="background:rgba(220,53,69,0.211)">0.067</td>
+            <td class="num" style="background:rgba(220,53,69,0.260)">0.182</td>
+            <td class="num" style="background:rgba(220,53,69,0.243)">0.186</td>
+            <td class="num" style="background:rgba(220,53,69,0.358)">0.157</td>
+            <td class="num" style="background:rgba(220,53,69,0.347)">0.363</td>
+            <td class="num" style="background:rgba(220,53,69,0.343)">0.674</td>
+            <td class="num" style="background:rgba(220,53,69,0.159)">0.011</td>
+            <td class="num" style="background:rgba(220,53,69,0.185)">0.052</td>
+            <td class="num" style="background:rgba(220,53,69,0.195)">0.119</td>
+            <td class="num" style="background:rgba(220,53,69,0.244)">0.076</td>
+            <td class="num" style="background:rgba(220,53,69,0.156)">0.480</td>
+            <td class="num" style="background:rgba(220,53,69,0.175)">0.532</td>
+          </tr>
+          <tr>
+            <th scope="row">Qwen2-Audio-7B-Instruct</th>
+            <td class="num" style="background:rgba(220,53,69,0.120)">-0.002</td>
+            <td class="num" style="background:rgba(220,53,69,0.120)">0.010</td>
+            <td class="num" style="background:rgba(220,53,69,0.120)">0.072</td>
+            <td class="num" style="background:rgba(220,53,69,0.120)">0.026</td>
+            <td class="num" style="background:rgba(220,53,69,0.120)">0.498</td>
+            <td class="num" style="background:rgba(220,53,69,0.120)">0.499</td>
+            <td class="num" style="background:rgba(220,53,69,0.120)">-0.002</td>
+            <td class="num" style="background:rgba(220,53,69,0.120)">0.007</td>
+            <td class="num" style="background:rgba(220,53,69,0.120)">0.083</td>
+            <td class="num" style="background:rgba(220,53,69,0.120)">0.025</td>
+            <td class="num" style="background:rgba(220,53,69,0.120)">0.496</td>
+            <td class="num" style="background:rgba(220,53,69,0.120)">0.498</td>
+          </tr>
+          <tr>
+            <th scope="row">MERaLiON-AudioLLM</th>
+            <td class="num" style="background:rgba(220,53,69,0.229)">0.081</td>
+            <td class="num" style="background:rgba(220,53,69,0.337)">0.276</td>
+            <td class="num" style="background:rgba(220,53,69,0.272)">0.213</td>
+            <td class="num" style="background:rgba(220,53,69,0.496)">0.233</td>
+            <td class="num" style="background:rgba(220,53,69,0.237)">0.428</td>
+            <td class="num" style="background:rgba(220,53,69,0.254)">0.604</td>
+            <td class="num" style="background:rgba(220,53,69,0.244)">0.039</td>
+            <td class="num" style="background:rgba(220,53,69,0.320)">0.146</td>
+            <td class="num" style="background:rgba(220,53,69,0.296)">0.167</td>
+            <td class="num" style="background:rgba(220,53,69,0.471)">0.169</td>
+            <td class="num" style="background:rgba(220,53,69,0.165)">0.476</td>
+            <td class="num" style="background:rgba(220,53,69,0.178)">0.534</td>
+          </tr>
+          <tr>
+            <th scope="row">MOSS-Audio</th>
+            <td class="num" style="background:rgba(220,53,69,0.374)">0.191</td>
+            <td class="num" style="background:rgba(220,53,69,0.423)">0.381</td>
+            <td class="num" style="background:rgba(220,53,69,0.417)">0.347</td>
+            <td class="num" style="background:rgba(220,53,69,0.475)">0.221</td>
+            <td class="num" style="background:rgba(220,53,69,0.483)">0.282</td>
+            <td class="num" style="background:rgba(220,53,69,0.493)">0.792</td>
+            <td class="num" style="background:rgba(220,53,69,0.355)">0.076</td>
+            <td class="num" style="background:rgba(220,53,69,0.438)">0.228</td>
+            <td class="num" style="background:rgba(220,53,69,0.336)">0.186</td>
+            <td class="num" style="background:rgba(220,53,69,0.485)">0.175</td>
+            <td class="num" style="background:rgba(220,53,69,0.517)">0.319</td>
+            <td class="num" style="background:rgba(220,53,69,0.535)">0.755</td>
+          </tr>
+          <tr>
+            <th scope="row">Qwen3-Omni</th>
+            <td class="num" style="background:rgba(220,53,69,0.323)">0.152</td>
+            <td class="num" style="background:rgba(220,53,69,0.354)">0.297</td>
+            <td class="num" style="background:rgba(220,53,69,0.304)">0.243</td>
+            <td class="num" style="background:rgba(220,53,69,0.444)">0.204</td>
+            <td class="num" style="background:rgba(220,53,69,0.325)">0.376</td>
+            <td class="num" style="background:rgba(220,53,69,0.287)">0.630</td>
+            <td class="num" style="background:rgba(220,53,69,0.334)">0.069</td>
+            <td class="num" style="background:rgba(220,53,69,0.420)">0.216</td>
+            <td class="num" style="background:rgba(220,53,69,0.332)">0.184</td>
+            <td class="num" style="background:rgba(220,53,69,0.461)">0.165</td>
+            <td class="num" style="background:rgba(220,53,69,0.535)">0.311</td>
+            <td class="num" style="background:rgba(220,53,69,0.501)">0.734</td>
+          </tr>
+          <tr>
+            <th scope="row">Audio-Flamingo-next</th>
+            <td class="num" style="background:rgba(220,53,69,0.271)">0.113</td>
+            <td class="num" style="background:rgba(220,53,69,0.371)">0.318</td>
+            <td class="num" style="background:rgba(220,53,69,0.303)">0.242</td>
+            <td class="num" style="background:rgba(220,53,69,0.485)">0.227</td>
+            <td class="num" style="background:rgba(220,53,69,0.372)">0.348</td>
+            <td class="num" style="background:rgba(220,53,69,0.398)">0.717</td>
+            <td class="num" style="background:rgba(220,53,69,0.386)">0.086</td>
+            <td class="num" style="background:rgba(220,53,69,0.489)">0.264</td>
+            <td class="num" style="background:rgba(220,53,69,0.338)">0.187</td>
+            <td class="num" style="background:rgba(220,53,69,0.576)">0.212</td>
+            <td class="num" style="background:rgba(220,53,69,0.369)">0.385</td>
+            <td class="num" style="background:rgba(220,53,69,0.403)">0.673</td>
+          </tr>
+          <tr>
+            <th scope="row">SALMONN</th>
+            <td class="num" style="background:rgba(220,53,69,0.584)">0.351</td>
+            <td class="num" style="background:rgba(220,53,69,0.600)">0.598</td>
+            <td class="num" style="background:rgba(220,53,69,0.594)">0.511</td>
+            <td class="num" style="background:rgba(220,53,69,0.600)">0.290</td>
+            <td class="num" style="background:rgba(220,53,69,0.578)">0.225</td>
+            <td class="num" style="background:rgba(220,53,69,0.572)">0.854</td>
+            <td class="num" style="background:rgba(220,53,69,0.564)">0.145</td>
+            <td class="num" style="background:rgba(220,53,69,0.576)">0.324</td>
+            <td class="num" style="background:rgba(220,53,69,0.581)">0.303</td>
+            <td class="num" style="background:rgba(220,53,69,0.559)">0.205</td>
+            <td class="num" style="background:rgba(220,53,69,0.515)">0.320</td>
+            <td class="num" style="background:rgba(220,53,69,0.526)">0.749</td>
+          </tr>
+          <tr class="ours">
+            <th scope="row">SALMONN (PSC)</th>
+            <td class="num" style="background:rgba(220,53,69,0.513)">0.297</td>
+            <td class="num" style="background:rgba(220,53,69,0.553)">0.541</td>
+            <td class="num" style="background:rgba(220,53,69,0.572)">0.491</td>
+            <td class="num" style="background:rgba(220,53,69,0.565)">0.271</td>
+            <td class="num" style="background:rgba(220,53,69,0.568)">0.231</td>
+            <td class="num" style="background:rgba(220,53,69,0.581)">0.861</td>
+            <td class="num" style="background:rgba(220,53,69,0.600)">0.157</td>
+            <td class="num" style="background:rgba(220,53,69,0.599)">0.340</td>
+            <td class="num" style="background:rgba(220,53,69,0.600)">0.312</td>
+            <td class="num" style="background:rgba(220,53,69,0.568)">0.209</td>
+            <td class="num" style="background:rgba(220,53,69,0.515)">0.320</td>
+            <td class="num" style="background:rgba(220,53,69,0.464)">0.711</td>
+          </tr>
+          <tr class="ours">
+            <th scope="row">SALMONN (SIC-DB) - ST</th>
+            <td class="num" style="background:rgba(220,53,69,0.600)">0.363</td>
+            <td class="num" style="background:rgba(220,53,69,0.583)">0.577</td>
+            <td class="num" style="background:rgba(220,53,69,0.590)">0.508</td>
+            <td class="num" style="background:rgba(220,53,69,0.589)">0.284</td>
+            <td class="num" style="background:rgba(220,53,69,0.597)">0.214</td>
+            <td class="num" style="background:rgba(220,53,69,0.600)">0.876</td>
+            <td class="num" style="background:rgba(220,53,69,0.564)">0.145</td>
+            <td class="num" style="background:rgba(220,53,69,0.576)">0.324</td>
+            <td class="num" style="background:rgba(220,53,69,0.581)">0.303</td>
+            <td class="num" style="background:rgba(220,53,69,0.559)">0.205</td>
+            <td class="num" style="background:rgba(220,53,69,0.515)">0.320</td>
+            <td class="num" style="background:rgba(220,53,69,0.526)">0.749</td>
+          </tr>
+          <tr class="ours">
+            <th scope="row">SALMONN (SIC-DB) - MT</th>
+            <td class="num" style="background:rgba(220,53,69,0.592)">0.357</td>
+            <td class="num" style="background:rgba(220,53,69,0.593)">0.590</td>
+            <td class="num" style="background:rgba(220,53,69,0.600)">0.517</td>
+            <td class="num" style="background:rgba(220,53,69,0.580)">0.279</td>
+            <td class="num" style="background:rgba(220,53,69,0.600)">0.212</td>
+            <td class="num" style="background:rgba(220,53,69,0.600)">0.876</td>
+            <td class="num" style="background:rgba(220,53,69,0.597)">0.156</td>
+            <td class="num" style="background:rgba(220,53,69,0.600)">0.341</td>
+            <td class="num" style="background:rgba(220,53,69,0.571)">0.298</td>
+            <td class="num" style="background:rgba(220,53,69,0.600)">0.222</td>
+            <td class="num" style="background:rgba(220,53,69,0.600)">0.282</td>
+            <td class="num" style="background:rgba(220,53,69,0.600)">0.795</td>
+          </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="table-section" id="table3">
+          <h3>Table 3</h3>
+          <p class="table-caption">
+            Speaker description verification results on VCTK (10 prompts per speaker). Higher AUC is better; lower EER and minDCF are better.
+          </p>
+          <div class="table-scroll">
+            <table class="results-table">
+              <thead>
+                <tr>
+                  <th>Model</th>
+                  <th>EER ↓</th>
+                  <th>AUC ↑</th>
+                  <th>minDCF ↓</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Audio-Flamingo-3</th><td class="num">0.462917</td><td class="num">0.556000</td><td class="num">0.025563</td></tr>
+                <tr><th scope="row">Voxtral-Mini-3B</th><td class="num">0.485625</td><td class="num">0.519186</td><td class="num">0.009994</td></tr>
+                <tr><th scope="row">Voxtral-Small-24B</th><td class="num">0.479792</td><td class="num">0.531450</td><td class="num">0.010206</td></tr>
+                <tr><th scope="row">Qwen2-Audio-7B-Instruct</th><td class="num">0.496250</td><td class="num">0.497724</td><td class="num">0.048633</td></tr>
+                <tr><th scope="row">MERaLiON-AudioLLM</th><td class="num">0.476250</td><td class="num">0.534108</td><td class="num">0.023596</td></tr>
+                <tr><th scope="row">MOSS-Audio</th><td class="num">0.319375</td><td class="num">0.755114</td><td class="num">0.010185</td></tr>
+                <tr><th scope="row">Qwen3-Omni</th><td class="num">0.311250</td><td class="num">0.734208</td><td class="num">0.010396</td></tr>
+                <tr><th scope="row">Audio-Flamingo-next</th><td class="num">0.384583</td><td class="num">0.673539</td><td class="num">0.031281</td></tr>
+                <tr><th scope="row">SALMONN</th><td class="num">0.320417</td><td class="num">0.749198</td><td class="num">0.009960</td></tr>
+                <tr class="ours"><th scope="row">SALMONN (PSC)</th><td class="num">0.281667</td><td class="num">0.795312</td><td class="num">0.010169</td></tr>
+                <tr class="ours"><th scope="row">SALMONN (SIC-DB) - ST</th><td class="num">0.264375</td><td class="num">0.831516</td><td class="num">0.009898</td></tr>
+                <tr class="ours"><th scope="row">SALMONN (SIC-DB) - MT</th><td class="num">0.281667</td><td class="num">0.795312</td><td class="num">0.010169</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="table-section" id="speakerConsistencyFigure">
+          <h3>Speaker description consistency (Axis 8)</h3>
+          <p class="table-caption">
+            t-SNE visualization for multi-model speaker clustering on VCTK. This axis evaluates whether speaker descriptions remain consistent across prompts and examples.
+          </p>
+          <div class="figure-wrap">
+            <img src="assets/tsne_all_speakers_doublecol_12.png" alt="t-SNE plot: all speakers (double column)">
+            <a class="pdf-link" href="tsne_all_speakers_doublecol_12.pdf">Open the plot as PDF</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>
+        StyleInstructCaps &middot;
+        <a href="https://huggingface.co/datasets/StyleInstructCaps/StyleInstructCapsDB">Dataset</a> &middot;
+        <a href="https://github.com/styleinstructcaps/StyleInstructCaps">Code</a>
+      </p>
+      <p>Released under <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>.</p>
+      <p style="margin-top: 12px; font-size: 12px; opacity: 0.85;">
+        Website design inspired by
+        <a href="https://speechparaling-bench.github.io">SpeechParaling-Bench</a> and
+        <a href="https://plnguyen2908.github.io/AV-SpeakerBench-project-page/">AV-SpeakerBench</a>.
+      </p>
+    </div>
+  </footer>
 </body>
 </html>
